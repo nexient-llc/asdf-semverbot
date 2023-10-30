@@ -40,12 +40,16 @@ download_release() {
 	local version filename url
 	version="$1"
 	filename="$2"
+	local platform=$(uname | tr '[:upper:]' '[:lower:]')
+	local architecture=$(uname -m | tr '[:upper:]' '[:lower:]' | sed 's/x86_64/amd64/')
 
+	if 
 	# TODO: Adapt the release URL convention for semverbot
-	url="$GH_REPO/archive/v${version}.tar.gz"
+	# https://github.com/restechnica/semverbot/releases/download/v1.3.2/sbot-darwin-amd64
+	url="$GH_REPO/releases/download/v${version}/sbot-${platform}-${architecture}"
 
 	echo "* Downloading $TOOL_NAME release $version..."
-	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
+	curl -L "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
 }
 
 install_version() {
@@ -59,7 +63,8 @@ install_version() {
 
 	(
 		mkdir -p "$install_path"
-		cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
+		cp "$ASDF_DOWNLOAD_PATH/sbot" "$install_path"
+		chmod +x "$install_path/sbot"
 
 		# TODO: Assert semverbot executable exists.
 		local tool_cmd
