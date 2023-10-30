@@ -2,7 +2,6 @@
 
 set -euo pipefail
 
-# TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for semverbot.
 GH_REPO="https://github.com/restechnica/semverbot"
 TOOL_NAME="semverbot"
 TOOL_TEST="sbot --help"
@@ -14,7 +13,6 @@ fail() {
 
 curl_opts=(-fsSL)
 
-# NOTE: You might want to remove this if semverbot is not hosted on GitHub releases.
 if [ -n "${GITHUB_API_TOKEN:-}" ]; then
 	curl_opts=("${curl_opts[@]}" -H "Authorization: token $GITHUB_API_TOKEN")
 fi
@@ -31,8 +29,6 @@ list_github_tags() {
 }
 
 list_all_versions() {
-	# TODO: Adapt this. By default we simply list the tag names from GitHub releases.
-	# Change this function if semverbot has other means of determining installable versions.
 	list_github_tags
 }
 
@@ -43,9 +39,6 @@ download_release() {
 	local platform=$(uname | tr '[:upper:]' '[:lower:]')
 	local architecture=$(uname -m | tr '[:upper:]' '[:lower:]' | sed 's/x86_64/amd64/')
 
-	if 
-	# TODO: Adapt the release URL convention for semverbot
-	# https://github.com/restechnica/semverbot/releases/download/v1.3.2/sbot-darwin-amd64
 	url="$GH_REPO/releases/download/v${version}/sbot-${platform}-${architecture}"
 
 	echo "* Downloading $TOOL_NAME release $version..."
@@ -66,7 +59,6 @@ install_version() {
 		cp "$ASDF_DOWNLOAD_PATH/sbot" "$install_path"
 		chmod +x "$install_path/sbot"
 
-		# TODO: Assert semverbot executable exists.
 		local tool_cmd
 		tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
 		test -x "$install_path/$tool_cmd" || fail "Expected $install_path/$tool_cmd to be executable."

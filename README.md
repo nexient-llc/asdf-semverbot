@@ -15,17 +15,14 @@
 
 # Dependencies
 
-**TODO: adapt this section**
-
-- `git`: to clone the semverbot repository
+- `curl`: to download the latest semverbot release
+- `git`: for use with semverbot
 
 # Install
 
 Plugin:
 
 ```shell
-asdf plugin add semverbot
-# or
 asdf plugin add semverbot https://github.com/chris-taylor-ntt/asdf-semverbot.git
 ```
 
